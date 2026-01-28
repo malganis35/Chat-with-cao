@@ -3,7 +3,7 @@ import sys
 from groq import Groq
 
 # Replace with your actual API key for testing
-API_KEY_PASSWORD = "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" 
+API_KEY_PASSWORD = "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" 
 
 def load_system_prompt(filename="system_prompt.txt"):
     """Reads the system prompt from a local text file."""
