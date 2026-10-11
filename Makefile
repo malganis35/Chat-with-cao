@@ -7,13 +7,13 @@ install: ## Install dependencies
 	uv sync
 
 run: ## Run the Streamlit web UI (main demo)
-	uv run streamlit run app.py
+	uv run streamlit run app/app.py
 
 protected: ## Run terminal chat, key from .env
-	uv run python main_protected.py
+	uv run scripts/main_protected.py
 
 chat: ## Run terminal chat, key hardcoded in main.py
-	uv run python main.py
+	uv run scripts/main.py
 
 clean: ## Remove Python and tool caches
 	find . -type d \( -name __pycache__ -o -name .mypy_cache \) -not -path './.venv/*' -prune -exec rm -rf {} +
