@@ -40,6 +40,23 @@ with st.sidebar:
     # Input Token API
     api_key_input = st.text_input("Entre ton Token API Groq :", type="password")
     
+    # Dropdown Modèle (liste fournie par Groq pour la clé saisie)
+    model_options = ["llama-3.1-8b-instant", "openai/gpt-oss-120b"]
+    if api_key_input:
+        try:
+            model_options = sorted(
+                m.id for m in Groq(api_key=api_key_input).models.list().data
+                if not any(k in m.id for k in ("whisper", "tts", "guard", "orpheus"))
+            ) or model_options
+        except Exception as e:
+            st.warning(f"Impossible de lister les modèles : {e}")
+    # Par défaut : un modèle Llama (le plus gros en priorité), sinon le premier de la liste
+    llama_models = sorted(
+        (m for m in model_options if "llama" in m and "70b" in m),
+    ) or [m for m in model_options if "llama" in m]
+    default_index = model_options.index(llama_models[0]) if llama_models else 0
+    selected_model = st.selectbox("Choisis le modèle :", model_options, index=default_index)
+
     # Dropdown Style de Prompt
     selected_style = st.selectbox("Choisis le style de l'IA :", list(PROMPT_STYLES.keys()))
     
@@ -89,7 +106,7 @@ if prompt := st.chat_input("Pose ta question ici..."):
                 
                 # Requête Streaming
                 completion = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
+                    model=selected_model,
                     messages=full_messages,
                     temperature=0.7,
                     max_tokens=1024,
