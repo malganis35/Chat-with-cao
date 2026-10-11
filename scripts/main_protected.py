@@ -3,7 +3,7 @@ import sys
 from groq import Groq
 from dotenv import load_dotenv
 
-def load_system_prompt(filename="system_prompt.txt"):
+def load_system_prompt(filename="../config/system_prompt.txt"):
     """Reads the system prompt from a local text file."""
     try:
         with open(filename, "r", encoding="utf-8") as f:
